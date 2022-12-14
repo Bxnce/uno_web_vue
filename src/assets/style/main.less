@@ -1,0 +1,260 @@
+@background: rgb(10, 10, 10);
+@font: Courier New, monospace;
+@fontcolor: rgb(214, 212, 212);
+@lg-break: 992px;
+@md-break: 768px;
+@sm-break: 576px;
+
+//Break points for responsive design
+@media (min-width: @lg-break) {
+  .main_header {
+    font-size: 80px;
+  }
+  .glow-on-hover{
+    font-size: 40px;
+  }
+  .input-field{
+    width: 250px;
+    height: 40px;
+    line-height: 40px ;
+    margin: 40px ;
+  }
+  label{
+    font-size: 25px;
+  }
+  input[type=text]{
+    font-size: 25px;
+  }
+  input:focus~label,
+  input:valid~label {
+  font-size: 25px;
+  top: -40px;
+  }
+  footer{
+    font-size: 16px;
+  }
+}
+
+@media (max-width: @lg-break) {
+  .main_header {
+    font-size: 60px;
+  }
+  .glow-on-hover{
+    font-size: 30px;
+  }
+  .home{
+    margin-top: 5rem;
+  }
+  .input-field{
+    width: 190px;
+    height: 30px;
+    line-height: 33px ;
+    margin: 30px ;
+  }
+  label{
+    font-size: 20px;
+  }
+  input[type=text]{
+    font-size: 20px;
+  }
+  input:focus~label,
+  input:valid~label {
+  font-size: 20px;
+  top: -30px;
+  }
+  footer{
+    font-size: 16px;
+  }
+}
+
+@media (max-width: @md-break) {
+  .main_header {
+    font-size: 40px;
+  }
+  .glow-on-hover{
+    font-size: 20px;
+  }
+  .home{
+    margin-top: 10rem;
+  }
+  .input-field{
+    width: 130px;
+    height: 20px;
+    line-height: 22px ;
+    margin: 20px ;
+  }
+  label{
+    font-size: 15px;
+  }
+  input[type=text]{
+    font-size: 15px;
+  }
+  input:focus~label,
+  input:valid~label {
+  font-size: 15px;
+  top: -20px;
+  }
+  footer{
+    font-size: 12px;
+  }
+}
+
+@media (max-width: @sm-break) {
+  .main_header {
+    font-size: 30px;
+  }
+  .glow-on-hover{
+    font-size: 15px;
+  }
+  .home{
+    margin-top: 15rem;
+  }
+  .input-field{
+    width: 60px;
+    height: 10px;
+    line-height: 11px ;
+    margin: 10px ;
+  }
+  label{
+    font-size: 10px;
+  }
+  input[type=text]{
+    font-size: 10px;
+  }
+  input:focus~label,
+  input:valid~label {
+  font-size: 10px;
+  top: -10px;
+  }
+  footer{
+    font-size: 12px;
+  }
+}
+//------------------------------------------------------------
+
+.loading {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  margin: auto;
+  transform: rotate(45deg);
+  top: 0; bottom: 0; left: 0; right: 0;
+}
+
+.full-layout {
+  min-height: 100vh;
+  display: flex;
+  background-color: @background;
+  flex-direction: column;
+}
+
+.remove-margin{
+  margin: auto;
+}
+
+.left-align{
+    align-items: start;
+    text-align: left;
+}
+
+.right-align{
+    align-items: start;
+    text-align: right;
+}
+
+.center-align{
+    align-items: center;
+    text-align: center;
+}
+
+.link{
+  color: #ff7878 !important;
+  text-decoration: none !important;
+  font-family: @font !important;
+}
+
+.link:hover {
+  color: #ffffff !important;
+  margin: 0 -.25rem;
+  padding: 0 .25rem;
+  transition: color .7s ease-in-out, box-shadow .7s ease-in-out;
+  text-decoration: none;
+}
+
+.link:hover {
+  color: #fff;
+  box-shadow: inset 200px 0 0 0 #ff7878;;
+}
+
+.glow-on-hover {
+  font-family: Courier New, monospace;
+  outline: none;
+  color: #fff;
+  background: @background;
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.glow-on-hover:before {
+  content: '';
+  background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+  position: absolute;
+  top: -2px;
+  left:-2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  width: calc(100% + 2px);
+  height: calc(100% + 4px);
+  animation: glowing 20s linear infinite;
+  opacity: 0;
+  transition: opacity .3s ease-in-out;
+  border-radius: 10px;
+}
+
+.glow-on-hover:active {
+  color: #000
+}
+
+.glow-on-hover:active:after {
+  background: transparent;
+}
+
+.glow-on-hover:hover:before {
+  opacity: 1;
+}
+
+.glow-on-hover:after {
+  z-index: -1;
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: @background;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+
+.set-colors{
+  color: @fontcolor !important;
+  background-color: @background !important;
+}
+
+@keyframes glowing {
+  0% { background-position: 0 0; }
+  50% { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
