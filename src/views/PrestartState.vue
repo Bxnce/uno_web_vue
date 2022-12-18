@@ -6,7 +6,7 @@
       <div class="col">
         <div class="d-flex justify-content-center">
           <div class="input-field">
-            <input type="text" id="player1" content="test1" required/>
+            <input type="text" v-model="player1" required/>
             <label for="player1">Player 1:</label>
           </div>
         </div>
@@ -16,7 +16,7 @@
       <div class="col">
         <div class="d-flex justify-content-center">
           <div class="input-field">
-            <input type="text" id="player2" content="test2" required/>
+            <input type="text" v-model="player2" required/>
             <label for="player2">Player 2:</label>
           </div>
         </div>
@@ -34,7 +34,7 @@
     <div class="row mt-3">
       <div class="col">
         <div class="d-flex justify-content-center">
-          <button type="button" class="glow-on-hover" id="get_to_mult" @click='route("/game_mult/setup_multiplayer")'>
+          <button type="button" class="glow-on-hover" id="get_to_mult" @click='route("/game/multiplayer/setup")'>
             Multiplayer
           </button>
         </div>
@@ -48,10 +48,17 @@
 import NavBar from "../components/NavBar.vue";
 import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
-import $ from "jquery";
+const SERVER_URL = "http://localhost:9000"
+
 
 export default {
   name: "PrestartState",
+  data(){
+    return {
+      player1: "",
+      player2: ""
+    };
+  },
   components: {
     Footer,
     NavBar,
@@ -59,13 +66,10 @@ export default {
   },
   methods: {
     async clicker() {
-      const SERVER_URL = "localhost:9000";
-      let player1 = $("#player1").val();
-      let player2 = $("#player2").val();
-      if (player1 === "" || player2 === "") {
+      if (this.player1 === "" || this.player2 === "") {
         alert("Please enter player names");
       } else {
-        this.res = await fetch("http://"+SERVER_URL+"/game/start/"+player1+"/"+player2, {
+        this.res = await fetch(SERVER_URL+"/game/start/"+this.player1+"/"+this.player2, {
           method: 'POST',
           headers: {
             'Accept': 'application/json */*',
@@ -73,19 +77,20 @@ export default {
           body: ""
         })
         if (this.res.ok) {
-          this.$router.push("/game/start");
+          this.route("/game/start");
+          console.log(this.res.json());
         } else {
           console.log("page failed loading");
         }
       }
     },
     route(ref) {
-      window.location.href = ref;
+      this.$router.push(ref);
     }
   },
 };
 </script>
 
 <style lang="less" scoped>
-@import "../assets/style/prestartState.less";
+@import "../../public/style/prestartState.less";
 </style>

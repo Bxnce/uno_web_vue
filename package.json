@@ -9,7 +9,10 @@
   },
   "dependencies": {
     "bootstrap": "^5.2.3",
+    "bootstrap-less": "^3.3.8",
+    "bootstrap-vue": "^2.23.1",
     "jquery": "^3.6.2",
+    "popper": "^1.0.1",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },

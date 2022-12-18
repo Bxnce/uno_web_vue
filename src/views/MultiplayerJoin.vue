@@ -1,9 +1,12 @@
 <template>
+  <div class="container-fluid full-layout" id="container_all">
+    <NavBar/>
+    <LoadingAnimation/>
   <div class="row mt-3">
     <div class="col">
       <div class="d-flex justify-content-center">
         <div class="input-field">
-          <input type="text" id="player" required />
+          <input type="text" v-model="player2" required />
           <label for="player1">Name:</label>
         </div>
       </div>
@@ -13,7 +16,7 @@
     <div class="col">
       <div class="d-flex justify-content-center">
         <div class="input-field">
-          <input type="text" id="game_hash" required />
+          <input type="text" v-model="hash" required />
           <label for="player1">Game Code:</label>
         </div>
       </div>
@@ -29,20 +32,45 @@
       </div>
     </div>
   </div>
+    <Footer/>
+  </div>
 </template>
 
 <script>
+import NavBar from "../components/NavBar.vue";
+import LoadingAnimation from "../components/LoadingAnimation.vue";
+import Footer from "../components/Footer.vue";
+
+const SERVER_URL = "http://localhost:9000"
+
 export default {
   name: "MultiplayerJoin",
+  data() {
+    return{
+      player2: "",
+      hash: "",
+    };
+  },
+  components: {Footer, LoadingAnimation, NavBar},
   methods: {
-    clicker() {
-      let player2 = $("#player").val();
-      let hash = $("#game_hash").val();
-      if (player2 == "" || hash == "") {
+    async clicker() {
+      if (this.player2 === "" || this.hash === "") {
         alert("Please enter name and hash");
       } else {
-        this.setCookies("player2State", document.getElementById("game_hash").value);
-        window.location.href = "/game_mult/join/" + this.getCookie("game") + "/" + this.getCookie("name");
+        this.setCookies("player2State", this.hash);
+        this.res = await fetch(SERVER_URL + "/game_mult/join/" + this.getCookie("game") + "/" + this.getCookie("name"), {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json */*',
+            'Content-Type': 'application/json'
+          },
+          body: ""
+        })
+        if (this.res.ok) {
+          this.$router.push("/game/multiplayer/start");
+        } else {
+          console.log("page failed loading");
+        }
       }
     },
     createHash() {
@@ -62,7 +90,7 @@ export default {
       }
       document.cookie = "pn=" + player;
       document.cookie = "player=" + state;
-      document.cookie = "name=" + document.getElementById("player").value;
+      document.cookie = "name=" + this.player2;
     },
     getCookie(name) {
       const value = `; ${document.cookie}`;
@@ -74,6 +102,6 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+@import "../../public/style/prestartState.less";
 </style>

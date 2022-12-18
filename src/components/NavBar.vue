@@ -34,5 +34,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../assets/style/main.less";
+@import "../../public/style/main.less";
 </style>

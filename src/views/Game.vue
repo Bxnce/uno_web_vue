@@ -1,46 +1,56 @@
 <template>
-  <div id="top_cards">
-    <div class="row row-col-2">
-      <div class="col-4 offset-4">
-        <div class="row center-align">
-          <div class="col-6 g-0">
-            <img id="midCard" :src="'/assets/images/'+ midCard" alt="X" class="card_no_hover img-fluid">
-          </div>
-          <div class="col-6 g-0">
-            <img src="/assets/images/uno_back.png" alt="X" @click="takeCard()" class="card_stack img-fluid"
-                 id="take_card">
+  <div class="container-fluid full-layout" id="container_all">
+    <NavBar/>
+    <LoadingAnimation/>
+    <div id="top_cards">
+      <div class="row row-col-2">
+        <div class="col-4 offset-4">
+          <div class="row center-align">
+            <div class="col-6 g-0">
+              <img id="midCard" :src="'../../public/images/'+ midCard" alt="X" class="card_no_hover img-fluid">
+            </div>
+            <div class="col-6 g-0">
+              <img src="../../public/images/uno_back.png" alt="X" @click="takeCard()" class="card_stack img-fluid"
+                   id="take_card">
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-6 offset-3" v-if="currentstate === 'player1State' || currentstate === 'player2State'">
-      <div class="row row-cols-3 g-0 center-align top-5">
-        <div class="col-sm-4 col-md-4 col-lg-3 col-xl-2 center-align" v-for="(card, index) in cards">
-          <img alt="X" @click='clickCard(index)' class="cards img-fluid" :src="'/assets/images/'+ card">
+    <div class="row">
+      <div class="col-6 offset-3" v-if="currentstate === 'player1State' || currentstate === 'player2State'">
+        <div class="row row-cols-3 g-0 center-align top-5">
+          <div class="col-sm-4 col-md-4 col-lg-3 col-xl-2 center-align" v-for="(card, index) in cards">
+            <img alt="X" @click='clickCard(index)' class="cards img-fluid" :src="'../../public/images/'+ card">
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="row center-align top-5">
-    <div class="col">
-      <button id="next_player_button" type="button" @click="nextPlayer()" class="glow-on-hover">next player</button>
+    <div class="row center-align top-5">
+      <div class="col">
+        <button id="next_player_button" type="button" @click="nextPlayer()" class="glow-on-hover">next player</button>
+      </div>
     </div>
+    <Footer/>
   </div>
 </template>
-
 <script>
+import NavBar from "../components/NavBar.vue";
+import LoadingAnimation from "../components/LoadingAnimation.vue";
+import Footer from "../components/Footer.vue";
+const SERVER_URL = "http://localhost:9000"
+
 export default {
   name: "game",
+  components: {Footer, LoadingAnimation, NavBar},
   data() {
     return {
-      req : '',
-      res : '',
-      currentstate : '',
-      player_cards : [],
+      req: '',
+      res: '',
+      currentstate: '',
+      player_cards: [],
       cards: [],
-      midCard : 'uno_back.png',
+      midCard: 'uno_back.png',
     }
   },
   methods: {
@@ -58,7 +68,7 @@ export default {
       await this.getJSON('/game/json');
     },
     async getJSON(url) {
-      this.res = await fetch(url, {
+      this.res = await fetch(SERVER_URL+url, {
         method: 'POST',
         headers: {
           'Accept': 'application/json */*',
@@ -95,6 +105,6 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+@import "../../public/style/playState.less";
 </style>
