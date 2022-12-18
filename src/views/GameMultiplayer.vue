@@ -67,7 +67,7 @@ export default {
       row: '',
       currentstate: '',
       player_cards: [],
-      wrapperd_cards: '',
+      wrapperd_cards: '', 
       card: '',
       cards: [],
       midCard: 'uno_back.png',
