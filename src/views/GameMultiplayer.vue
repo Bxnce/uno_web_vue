@@ -48,6 +48,9 @@
 import NavBar from "../components/NavBar.vue";
 import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
+import { post_it } from "../main.js";
+
+
 export default {
   name: "GameMultiplayer",
   components: {Footer, LoadingAnimation, NavBar},
@@ -157,14 +160,7 @@ export default {
       this.socket.send("heartBeat");
     },
     async gameChanges(url) {
-      this.res = await fetch("http://127.0.0.1:9000" + url, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json */*',
-          'Content-Type': 'application/json'
-        },
-        body: ""
-      })
+      this.res = await post_it(url);
       if (this.res.ok) {
         await this.res.text();
         this.socket.send("refresh");

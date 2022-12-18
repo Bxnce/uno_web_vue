@@ -41,7 +41,7 @@ import NavBar from "../components/NavBar.vue";
 import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
 
-const SERVER_URL = "http://localhost:9000"
+import { post_it } from "../main.js";
 
 export default {
   name: "MultiplayerJoin",
@@ -58,14 +58,7 @@ export default {
         alert("Please enter name and hash");
       } else {
         this.setCookies("player2State", this.hash);
-        this.res = await fetch(SERVER_URL + "/game_mult/join/" + this.getCookie("game") + "/" + this.getCookie("name"), {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json */*',
-            'Content-Type': 'application/json'
-          },
-          body: ""
-        })
+        this.res = await post_it("/game_mult/join/" + this.getCookie("game") + "/" + this.getCookie("name"))
         if (this.res.ok) {
           this.$router.push("/game/multiplayer/start");
         } else {

@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     route() {
-      window.location.href = "/game/setup";
+      this.$router.push("/game/setup");
     }
   },
 };

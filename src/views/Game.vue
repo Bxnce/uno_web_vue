@@ -7,10 +7,10 @@
         <div class="col-4 offset-4">
           <div class="row center-align">
             <div class="col-6 g-0">
-              <img id="midCard" :src="'../../public/images/'+ midCard" alt="X" class="card_no_hover img-fluid">
+              <img id="midCard" :src="'/images/'+ midCard" alt="X" class="card_no_hover img-fluid">
             </div>
             <div class="col-6 g-0">
-              <img src="../../public/images/uno_back.png" alt="X" @click="takeCard()" class="card_stack img-fluid"
+              <img src="/images/uno_back.png" alt="X" @click="takeCard()" class="card_stack img-fluid"
                    id="take_card">
             </div>
           </div>
@@ -20,8 +20,8 @@
     <div class="row">
       <div class="col-6 offset-3" v-if="currentstate === 'player1State' || currentstate === 'player2State'">
         <div class="row row-cols-3 g-0 center-align top-5">
-          <div class="col-sm-4 col-md-4 col-lg-3 col-xl-2 center-align" v-for="(card, index) in cards">
-            <img alt="X" @click='clickCard(index)' class="cards img-fluid" :src="'../../public/images/'+ card">
+          <div class="padding-0 col-sm-4 col-md-4 col-lg-3 col-xl-2 center-align" v-for="(card, index) in cards"> <!-- margin of this div is to big -->
+            <img alt="X" @click='clickCard(index)' class="cards img-fluid" :src="'/images/'+ card">
           </div>
         </div>
       </div>
@@ -38,7 +38,8 @@
 import NavBar from "../components/NavBar.vue";
 import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
-const SERVER_URL = "http://localhost:9000"
+import { post_it } from "../main.js";
+
 
 export default {
   name: "game",
@@ -68,14 +69,7 @@ export default {
       await this.getJSON('/game/json');
     },
     async getJSON(url) {
-      this.res = await fetch(SERVER_URL+url, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json */*',
-          'Content-Type': 'application/json'
-        },
-        body: ""
-      })
+      this.res = await post_it(url);
       if (this.res.ok) {
         await this.createCards(await this.res.json())
       } else {
@@ -98,7 +92,6 @@ export default {
         }
         this.player_cards = json["game"].player2["png_ind"];
       }
-
       this.player_cards.forEach(element => this.cards.push(element["card_png"]));
     },
   },

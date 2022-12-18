@@ -23,7 +23,7 @@ const router = createRouter({
         {
             path: "/game/setup",
             name: "prestart_state",
-            component: PrestartState, // not implemented yet
+            component: PrestartState,
         },
         {
             path: "/game/start",

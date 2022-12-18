@@ -38,7 +38,7 @@
 import NavBar from "../components/NavBar.vue";
 import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
-const SERVER_URL = "http://localhost:9000"
+import { post_it } from "../main.js";
 
 export default {
   name: "PrestartMultiplayer",
@@ -56,16 +56,7 @@ export default {
       if (this.name !== "") {
         this.setCookies("player1State", "", "player1");
         document.getElementById("player1_label").innerHTML = "Game code: " + this.getCookie("game");
-        this.route("/game_mult/cc/" + this.getCookie("game") + "/" + this.getCookie("name"));
-
-        this.res = await fetch(SERVER_URL + "/game_mult/cc/" + this.getCookie("game") + "/" + this.getCookie("name"), {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json */*',
-            'Content-Type': 'application/json'
-          },
-          body: ""
-        })
+        this.res = await post_it("/game_mult/cc/" + this.getCookie("game") + "/" + this.getCookie("name"))
         if (this.res.ok) {
           this.route("/game/multiplayer/start");
         } else {

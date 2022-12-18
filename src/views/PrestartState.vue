@@ -48,7 +48,8 @@
 import NavBar from "../components/NavBar.vue";
 import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
-const SERVER_URL = "http://localhost:9000"
+import { post_it } from "../main.js";
+
 
 
 export default {
@@ -69,16 +70,9 @@ export default {
       if (this.player1 === "" || this.player2 === "") {
         alert("Please enter player names");
       } else {
-        this.res = await fetch(SERVER_URL+"/game/start/"+this.player1+"/"+this.player2, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json */*',
-            'Content-Type': 'application/json'},
-          body: ""
-        })
+        this.res = await post_it("/game/start/"+this.player1+"/"+this.player2);
         if (this.res.ok) {
           this.route("/game/start");
-          console.log(this.res.json());
         } else {
           console.log("page failed loading");
         }
