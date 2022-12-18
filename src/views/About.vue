@@ -139,5 +139,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "../assets/style/about.less";
+@import "../../public/style/about.less";
 </style>

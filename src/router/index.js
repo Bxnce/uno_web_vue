@@ -40,11 +40,11 @@ const router = createRouter({
             name: "prejoin",
             component: MultiplayerJoin,
         },
-        //{
-        //    game: "/game/multiplayer/start",
-        //    name: "multiplayer",
-        //    component: GameMultiplayer,
-        //},
+        {
+            path: "/game/multiplayer/start",
+            name: "multiplayer",
+            component: GameMultiplayer,
+        },
         {
             path: "/:pathMatch(.*)*",
             redirect: "/",

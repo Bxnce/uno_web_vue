@@ -34,7 +34,7 @@
     <div class="row mt-3">
       <div class="col">
         <div class="d-flex justify-content-center">
-          <button type="button" class="glow-on-hover" id="get_to_mult" @click='route("/game_mult/setup_multiplayer")'>
+          <button type="button" class="glow-on-hover" id="get_to_mult" @click='route("/game/multiplayer/setup")'>
             Multiplayer
           </button>
         </div>
@@ -48,7 +48,8 @@
 import NavBar from "../components/NavBar.vue";
 import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
-import $ from "jquery";
+const SERVER_URL = "http://localhost:9000"
+
 
 export default {
   name: "PrestartState",
@@ -73,19 +74,20 @@ export default {
           body: ""
         })
         if (this.res.ok) {
-          this.$router.push("/game/start");
+          this.route("/game/start");
+          console.log(this.res.json());
         } else {
           console.log("page failed loading");
         }
       }
     },
     route(ref) {
-      window.location.href = ref;
+      this.$router.push(ref);
     }
   },
 };
 </script>
 
 <style lang="less" scoped>
-@import "../assets/style/prestartState.less";
+@import "../../public/style/prestartState.less";
 </style>

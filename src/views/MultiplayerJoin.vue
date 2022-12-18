@@ -1,4 +1,7 @@
 <template>
+  <div class="container-fluid full-layout" id="container_all">
+    <NavBar/>
+    <LoadingAnimation/>
   <div class="row mt-3">
     <div class="col">
       <div class="d-flex justify-content-center">
@@ -29,11 +32,26 @@
       </div>
     </div>
   </div>
+    <Footer/>
+  </div>
 </template>
 
 <script>
+import NavBar from "../components/NavBar.vue";
+import LoadingAnimation from "../components/LoadingAnimation.vue";
+import Footer from "../components/Footer.vue";
+
+const SERVER_URL = "http://localhost:9000"
+
 export default {
   name: "MultiplayerJoin",
+  data() {
+    return{
+      player2: "",
+      hash: "",
+    };
+  },
+  components: {Footer, LoadingAnimation, NavBar},
   methods: {
     clicker() {
       let player2 = $("#player").val();
@@ -41,8 +59,20 @@ export default {
       if (player2 == "" || hash == "") {
         alert("Please enter name and hash");
       } else {
-        this.setCookies("player2State", document.getElementById("game_hash").value);
-        window.location.href = "/game_mult/join/" + this.getCookie("game") + "/" + this.getCookie("name");
+        this.setCookies("player2State", this.hash);
+        this.res = await fetch(SERVER_URL + "/game_mult/join/" + this.getCookie("game") + "/" + this.getCookie("name"), {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json */*',
+            'Content-Type': 'application/json'
+          },
+          body: ""
+        })
+        if (this.res.ok) {
+          this.$router.push("/game/multiplayer/start");
+        } else {
+          console.log("page failed loading");
+        }
       }
     },
     createHash() {
@@ -74,6 +104,6 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+@import "../../public/style/prestartState.less";
 </style>
