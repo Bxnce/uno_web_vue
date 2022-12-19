@@ -1,8 +1,7 @@
-import {createApp} from 'vue'
+import { createApp } from 'vue'
 import App from "./App.vue";
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap/dist/js/bootstrap.bundle.min.js"
-import "bootstrap-vue/dist/bootstrap-vue.css"
 
 import router from "./router/";
 
@@ -18,7 +17,8 @@ export async function post_it(url){
         body: ""
     });
 }
-
+const BASE_URL = import.meta.env.BASE_URL
+console.log(BASE_URL)
 const app = createApp(App);
 app.use(router);
 app.mount('#app')

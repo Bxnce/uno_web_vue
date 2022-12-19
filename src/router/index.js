@@ -1,11 +1,12 @@
-import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
-import About from "../views/About.vue";
-import PrestartState from "../views/PrestartState.vue";
-import Game from "../views/Game.vue";
-import PrestartMultiplayer from "../views/PrestartMultiplayer.vue";
-import MultiplayerJoin from "../views/MultiplayerJoin.vue";
-import GameMultiplayer from "../views/GameMultiplayer.vue";
+import { createRouter, createWebHistory } from 'vue-router'
+import Home from "../views/Home.vue"
+import About from "../views/About.vue"
+import PrestartState from "../views/PrestartState.vue"
+import Game from "../views/Game.vue"
+import PrestartMultiplayer from "../views/PrestartMultiplayer.vue"
+import MultiplayerJoin from "../views/MultiplayerJoin.vue"
+import GameMultiplayer from "../views/GameMultiplayer.vue"
+
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +51,6 @@ const router = createRouter({
             redirect: "/",
         },
     ],
-});
+})
 
-export default router;
+export default router
