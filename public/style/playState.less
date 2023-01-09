@@ -1,36 +1,42 @@
 @import "main";
 
 
-@media (max-width: @lg-break) {
-    footer{
-      font-size: 16px;
-      position: relative !important;
-    }
-  }
-.card_no_hover{
-    width: 7rem;
-    height: 10rem;
-}
-
-.cards{
+@media (min-width: @sm-break) {
+  .cards{
     width: 7rem;
     height: 10rem;
     cursor: pointer;
+  }
+  .card_stack{
+    width: 7rem;
+    height: 10rem;
+    cursor: pointer;
+  }
+  .card_no_hover{
+    width: 7rem;
+    height: 10rem;
+  }
 }
 
-.card_stack{
-  width: 7rem;
-  height: 10rem;
-  cursor: pointer;
+@media (max-width: @sm-break) {
+  .cards{
+    width: 3.5rem;
+    height: 5rem;
+    cursor: pointer;
+  }
+  .card_stack{
+    width: 3.5rem;
+    height: 5rem;
+    cursor: pointer;
+  }
+  .card_no_hover{
+    width: 3.5rem;
+    height: 5rem;
+  }
 }
 
 .glow-on-hover{
   margin-top: 3rem;
-}
-
-.padding-0{
-  padding-right:0;
-  padding-left:0;
 }
 
 footer {

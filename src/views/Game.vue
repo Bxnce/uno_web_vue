@@ -19,9 +19,9 @@
     </div>
     <div class="row">
       <div class="col-6 offset-3" v-if="currentstate === 'player1State' || currentstate === 'player2State'">
-        <div class="row row-cols-3 g-0 center-align top-5">
-          <div class="padding-0 col-sm-4 col-md-4 col-lg-3 col-xl-2 center-align" v-for="(card, index) in cards"> <!-- margin of this div is to big -->
-            <img alt="X" @click='clickCard(index)' class="cards img-fluid" :src="'/images/'+ card">
+        <div class="row row-cols-3 g-0 center-align top-5 remove-margin">
+          <div class="col-sm-4 col-md-4 col-lg-3 col-xl-2 center-align remove-margin" v-for="(card, index) in cards"> <!-- margin of this div is to big -->
+            <img alt="X" @click='clickCard(index)' class="cards remove-margin img-fluid" :src="'/images/'+ card">
           </div>
         </div>
       </div>
@@ -31,7 +31,6 @@
         <button id="next_player_button" type="button" @click="nextPlayer()" class="glow-on-hover">next player</button>
       </div>
     </div>
-    <Footer/>
   </div>
 </template>
 <script>

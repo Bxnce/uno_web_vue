@@ -40,7 +40,6 @@
         <div v-if="waiting === true" style="font-size: 32px; color: white">Your game code is: {{ game_code }}</div>
       </div>
     </div>
-    <Footer/>
   </div>
 </template>
 
