@@ -22,27 +22,27 @@ const router = createRouter({
             component: About,
         },
         {
-            path: "/game/setup",
-            name: "prestart_state",
+            path: "/setup",
+            name: "setup",
             component: PrestartState,
         },
         {
-            path: "/game/start",
+            path: "/start",
             name: "game",
             component: Game,
         },
         {
-            path: "/game/multiplayer/setup",
+            path: "/mpsetup",
             name: "prestart_state_mult",
             component: PrestartMultiplayer,
         },
         {
-            path: "/game/multiplayer/prejoin",
+            path: "/mpprejoin",
             name: "prejoin",
             component: MultiplayerJoin,
         },
         {
-            path: "/game/multiplayer/start",
+            path: "/mpstart",
             name: "multiplayer",
             component: GameMultiplayer,
         },

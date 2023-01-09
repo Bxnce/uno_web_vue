@@ -18,7 +18,7 @@
     </div>
     <div class="row center-align">
       <div class="col">
-        <RouterLink type="button" class="glow-on-hover" to='/game/setup'>
+        <RouterLink type="button" class="glow-on-hover" to='/setup'>
           Start a Game!
         </RouterLink>
       </div>
@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     route() {
-      this.$router.push("/game/setup");
+      this.$router.push("/setup");
     }
   },
 };

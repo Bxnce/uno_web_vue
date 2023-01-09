@@ -19,6 +19,4 @@ export async function post_it(url){
 }
 const BASE_URL = import.meta.env.BASE_URL
 console.log(BASE_URL)
-const app = createApp(App);
-app.use(router);
-app.mount('#app')
+const app = createApp(App).use(router).mount('#app');

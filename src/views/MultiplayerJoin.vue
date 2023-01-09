@@ -60,7 +60,7 @@ export default {
         this.setCookies("player2State", this.hash);
         this.res = await post_it("/game_mult/join/" + this.getCookie("game") + "/" + this.getCookie("name"))
         if (this.res.ok) {
-          this.$router.push("/game/multiplayer/start");
+          this.$router.push("/mpstart");
         } else {
           console.log("page failed loading");
         }

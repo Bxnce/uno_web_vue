@@ -34,7 +34,7 @@
     <div class="row mt-3">
       <div class="col">
         <div class="d-flex justify-content-center">
-          <button type="button" class="glow-on-hover" id="get_to_mult" @click='route("/game/multiplayer/setup")'>
+          <button type="button" class="glow-on-hover" id="get_to_mult" @click='route("/mpsetup")'>
             Multiplayer
           </button>
         </div>
@@ -72,7 +72,7 @@ export default {
       } else {
         this.res = await post_it("/game/start/"+this.player1+"/"+this.player2);
         if (this.res.ok) {
-          this.route("/game/start");
+          this.route("/start");
         } else {
           console.log("page failed loading");
         }

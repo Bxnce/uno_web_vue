@@ -24,7 +24,7 @@
     <div class="row mt-3">
       <div class="col">
         <div class="d-flex justify-content-center">
-          <button type="button" class="glow-on-hover" id="join_multiplayer" @click='route("/game/multiplayer/prejoin")'>
+          <button type="button" class="glow-on-hover" id="join_multiplayer" @click='route("/mpprejoin")'>
             Join a Game
           </button>
         </div>
@@ -58,7 +58,7 @@ export default {
         document.getElementById("player1_label").innerHTML = "Game code: " + this.getCookie("game");
         this.res = await post_it("/game_mult/cc/" + this.getCookie("game") + "/" + this.getCookie("name"))
         if (this.res.ok) {
-          this.route("/game/multiplayer/start");
+          this.route("/mpstart");
         } else {
           console.log("page failed loading");
         }

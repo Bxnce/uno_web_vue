@@ -11,7 +11,7 @@
             <RouterLink class="nav-link router-link" aria-current="page" to="/">Home</RouterLink>
           </li>
           <li class="nav-item">
-            <RouterLink class="nav-link router-link" to="/game/setup">StartGame</RouterLink>
+            <RouterLink class="nav-link router-link" to="/setup">StartGame</RouterLink>
           </li>
           <li class="nav-item">
             <RouterLink class="nav-link router-link" to="/about">About</RouterLink>

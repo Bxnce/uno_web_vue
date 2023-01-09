@@ -132,7 +132,7 @@ export default {
   },
   methods: {
     route() {
-      this.$router.push("/game/setup");
+      this.$router.push("/setup");
     }
   },
 }
