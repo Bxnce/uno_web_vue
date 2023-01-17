@@ -5,9 +5,10 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js"
 
 import router from "./router/";
 
-export const SERVER_URL = "http://localhost:9000";
+export const SERVER_URL = "https://uno-web.herokuapp.com";
 export async function post_it(url){
     const req = SERVER_URL + url;
+    console.log(req)
     return await fetch(req, {
         method: 'POST',
         headers: {
@@ -17,6 +18,7 @@ export async function post_it(url){
         body: ""
     });
 }
+console.log("Hello There")
 const BASE_URL = import.meta.env.BASE_URL
 console.log(BASE_URL)
 const app = createApp(App).use(router).mount('#app');
