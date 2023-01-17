@@ -82,7 +82,7 @@ export default {
   methods: {
     webSocketInit() {
       let _this = this;
-      this.socket = new WebSocket("ws://127.0.0.1:9000/ws/" + this.getCookie("game"))
+      this.socket = new WebSocket("ws://uno-web.herokuapp.com/ws/" + this.getCookie("game"))
       this.socket.onopen = () => this.heartBeat();
       this.socket.onclose = () => console.log("Connection closed")
       this.socket.onmessage = function (event) {
