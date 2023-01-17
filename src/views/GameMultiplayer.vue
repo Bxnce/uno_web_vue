@@ -47,7 +47,7 @@
 import NavBar from "../components/NavBar.vue";
 import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
-import { post_it } from "../main.js";
+import {post_it} from "../main.js";
 
 
 export default {
@@ -69,7 +69,7 @@ export default {
       row: '',
       currentstate: '',
       player_cards: [],
-      wrapperd_cards: '', 
+      wrapperd_cards: '',
       card: '',
       cards: [],
       midCard: 'uno_back.png',
@@ -149,8 +149,6 @@ export default {
           this.player_cards = json["game"].player2["png_ind"];
           this.play_against = "playing against: " + json["game"].player1["name"] + " with " + json["game"].player1["kartenzahl"] + " cards left";
         }
-
-
       }
       this.cards = [];
       this.player_cards.forEach(element => this.cards.push(element["card_png"]));
