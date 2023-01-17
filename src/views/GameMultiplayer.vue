@@ -7,12 +7,12 @@
         <div class="col-4 offset-4">
           <div class="row center-align">
             <div class="col-6 g-0">
-              <img id="midCard" :src="'../../public/images/'+ midCard" alt="X" class="card_no_hover img-fluid">
+              <img id="midCard" :src="'/images/'+ midCard" alt="X" class="card_no_hover img-fluid">
             </div>
             <div class="col-6 g-0">
-              <img v-if="clickable === true" src="../../public/images/uno_back.png" alt="X" @click="takeCardMult()"
+              <img v-if="clickable === true" src="/images/uno_back.png" alt="X" @click="takeCardMult()"
                    class="card_stack img-fluid" id="take_card">
-              <img v-else src="../../public/images/uno_back.png" alt="X" class="card_stack img-fluid" id="take_card">
+              <img v-else src="/images/uno_back.png" alt="X" class="card_stack img-fluid" id="take_card">
             </div>
           </div>
         </div>
@@ -23,8 +23,8 @@
         <div class="row row-cols-3 g-0 center-align top-5">
           <div class="col-sm-4 col-md-4 col-lg-3 col-xl-2 center-align" v-for="(card, index) in cards">
             <img v-if="clickable === true" alt="X" @click='clickCardMult(index)' class="cards img-fluid"
-                 :src="'../../public/images/'+ card">
-            <img v-else alt="X" class="cards img-fluid" :src="'../../public/images/'+ card">
+                 :src="'/images/'+ card">
+            <img v-else alt="X" class="cards img-fluid" :src="'/images/'+ card">
           </div>
         </div>
       </div>
