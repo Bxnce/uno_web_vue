@@ -100,7 +100,6 @@
 
 <script>
 import NavBar from "../components/NavBar.vue";
-import LoadingAnimation from "../components/LoadingAnimation.vue";
 import {post_it, BASE_URL} from "../main.js";
 import {notify} from "@kyvg/vue3-notification";
 import ColorChoose from "../components/ColorChoose.vue";
@@ -191,8 +190,10 @@ export default {
       }
       this.url = "/game_mult/place/" + ind + "/" + this.getCookie("game");
       await this.gameChanges(this.url)
-      console.log(this.midCard)
-      },
+      if(checkWC === "WC" || checkWC === "+4"){
+          await this.chooseColor()
+      }
+    },
     clickCardError() {
       notify({
         title: "Error",
@@ -243,6 +244,7 @@ export default {
       this.game_code = this.getCookie("game");
     },
     async createCardsMultiplayer(json) {
+      this.currentJson = json
       this.waiting = false;
       this.midCard = json["game"].midCard["png_ind"][0]["card_png"];
       //-----------------------------------------

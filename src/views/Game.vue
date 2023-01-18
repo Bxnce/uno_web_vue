@@ -1,8 +1,8 @@
 <template>
   <div class="container-fluid full-layout" id="container_all">
     <NavBar/>
-    <LoadingAnimation/>
-    <div id="top_cards">
+    <div class="top-margin"></div>
+    <div id="top_cards ">
       <div class="row row-col-2">
         <div class="col-4 offset-4">
           <div class="row center-align">
@@ -36,14 +36,13 @@
 </template>
 <script>
 import NavBar from "../components/NavBar.vue";
-import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
 import {BASE_URL, post_it} from "../main.js";
 import {notify} from "@kyvg/vue3-notification";
 
 export default {
   name: "game",
-  components: {Footer, LoadingAnimation, NavBar},
+  components: {Footer, NavBar},
   data() {
     return {
       req: '',

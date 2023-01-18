@@ -1,8 +1,7 @@
 <template>
   <div class="container-fluid full-layout" id="container_all">
     <NavBar/>
-    <LoadingAnimation/>
-    <main class="about">
+    <main class="about top-margin">
       <div class="div">
         <p>
           Uno is a highly popular card game played by millions around the globe. The game is for 2-10 players, ages 7
@@ -120,14 +119,12 @@
 
 <script>
 import NavBar from "../components/NavBar.vue";
-import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
 
 export default {
   name: "About",
   components: {
     NavBar,
-    LoadingAnimation,
     Footer
   },
   methods: {
