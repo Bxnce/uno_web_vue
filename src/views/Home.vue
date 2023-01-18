@@ -1,8 +1,7 @@
 <template>
-  <div class="container-fluid full-layout" id="container_all">
-    <NavBar />
-    <LoadingAnimation />
-    <div class="row center-align">
+  <div class="container-fluid full-layout " id="container_all">
+    <NavBar/>
+    <div class="row center-align top-margin">
       <div class="col">
         <div class="main_header">
           The ultimative
@@ -29,7 +28,6 @@
 
 <script>
 import NavBar from "../components/NavBar.vue";
-import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
 
 export default {
@@ -37,7 +35,6 @@ export default {
   components: {
     Footer,
     NavBar,
-    LoadingAnimation
   },
   methods: {
     route() {

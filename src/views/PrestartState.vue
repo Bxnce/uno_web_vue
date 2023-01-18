@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid full-layout" id="container_all">
     <NavBar/>
-    <LoadingAnimation/>
+    <div class="top-margin"></div>
     <div class="row mt-3">
       <div class="col">
         <div class="d-flex justify-content-center">
@@ -46,7 +46,6 @@
 
 <script>
 import NavBar from "../components/NavBar.vue";
-import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
 import { post_it } from "../main.js";
 
@@ -63,7 +62,6 @@ export default {
   components: {
     Footer,
     NavBar,
-    LoadingAnimation
   },
   methods: {
     async clicker() {

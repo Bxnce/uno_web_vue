@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid full-layout" id="container_all">
     <NavBar/>
-    <LoadingAnimation/>
+    <div class="top-margin"></div>
     <div id="top_cards">
       <div class="row row-col-2">
         <div class="col-4 offset-4">
@@ -12,7 +12,8 @@
             <div class="col-6 g-0">
               <img v-if="clickable === true" src="/images/cards/uno_back.png" alt="X" @click="takeCardMult()"
                    class="card_stack img-fluid" id="take_card">
-              <img v-else src="/images/cards/uno_back.png" alt="X" class="card_stack img-fluid" id="take_card">
+              <img v-else src="/images/cards/uno_back.png" alt="X" class="card_stack img-fluid" id="take_card"
+                   @click="takeCardMultErr()">
             </div>
           </div>
         </div>
@@ -31,28 +32,87 @@
     </div>
     <div class="row center-align top-5">
       <div class="col">
-        <button v-if="waiting === true" id="next_player_button_mult" type="button" class="glow-on-hover" disabled>
-          waiting for enemy.
-        </button>
-        <button v-else id="next_player_button_mult" type="button" @click="nextPlayerMult()" class="glow-on-hover">next
-          player
-        </button>
-        <div v-if="waiting === true" style="font-size: 32px; color: white">Your game code is: {{ game_code }}</div>
+        <div v-if="waiting === true" >
+          <div class="centerr marg-waves">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+          </div>
+        </div>
+        <div v-else>
+          <div v-if="clickable===true">
+            <button id="next_player_button_mult" type="button" @click="nextPlayerMult()" class="glow-on-hover">next
+              player
+            </button>
+          </div>
+          <div v-else>
+              <p class="marg-txt txt">
+                Not your turn! {{ this.enemy_cards }}
+              </p>
+              <div class="centerr">
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+              </div>
+          </div>
+        </div>
+        <div v-if="waiting === true" class="marg-txt txt">Waiting for opponent! Your game code is: {{ game_code }}</div>
       </div>
     </div>
+    <notifications position="bottom right" />
+    <ColorChoose :open="isOpen" @close="isOpen = !isOpen">
+      <p class="glow">Choose your Color!</p>
+      <table class="cnter">
+        <tr>
+          <td>
+            <img id="red" src="/images/cards/red.png" alt="X" class="cards img-fluid" @click="setColor('Red')">
+          </td>
+          <td>
+            <img id="blue" src="/images/cards/blue.png" alt="X" class="cards img-fluid" @click="setColor('Blue')">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img id="green" src="/images/cards/green.png" alt="X" class="cards img-fluid" @click="setColor('Green')">
+          </td>
+          <td>
+            <img id="yellow" src="/images/cards/yellow.png" alt="X" class="cards img-fluid" @click="setColor('Yellow')">
+          </td>
+        </tr>
+      </table>
+    </ColorChoose>
   </div>
 </template>
 
 <script>
 import NavBar from "../components/NavBar.vue";
-import LoadingAnimation from "../components/LoadingAnimation.vue";
-import Footer from "../components/Footer.vue";
 import {post_it, BASE_URL} from "../main.js";
+import {notify} from "@kyvg/vue3-notification";
+import ColorChoose from "../components/ColorChoose.vue";
+import {ref} from "vue";
 
 
 export default {
   name: "GameMultiplayer",
-  components: {Footer, LoadingAnimation, NavBar},
+  components: { NavBar, ColorChoose,},
+  setup() {
+    const isOpen = ref(false)
+    return {isOpen}
+  },
   data() {
     return {
       socket: undefined,
@@ -61,7 +121,7 @@ export default {
       url: '',
       clickable: false,
       waiting: true,
-      play_against: '',
+      enemy_cards: '',
       game_code: '',
       req: '',
       res: '',
@@ -72,8 +132,11 @@ export default {
       wrapperd_cards: '',
       card: '',
       cards: [],
+      currentJson: '',
+      chosenColor: '',
       midCard: 'uno_back.png',
       baseUrl : BASE_URL,
+      tookCard : false,
     }
   },
   created() {
@@ -92,7 +155,6 @@ export default {
             console.log("ping")
           } else {
             console.log("json reloaded");
-            console.log(JSON.parse(event.data));
             _this.createCardsMultiplayer(JSON.parse(event.data));
           }
         } else {
@@ -103,35 +165,86 @@ export default {
 
       setInterval(() => this.socket.send("Keep alive"), 20000); // ping every 20 seconds
     },
+    async chooseColor() {
+      this.url = "/game_mult/color/" + this.getCookie("game") + "/" + this.chosenColor;
+      await this.gameChanges(this.url)
+      console.log(this.chosenColor)
+    },
+    setColor(color) {
+      this.chosenColor = color
+      this.isOpen = !this.isOpen
+    },
     getCookie(name) {
       this.value = `; ${document.cookie}`;
       this.parts = this.value.split(`; ${name}=`);
       if (this.parts.length === 2) return this.parts.pop().split(';').shift();
     },
     async clickCardMult(ind) {
+      const checkWC = this.currentJson["game"][this.getCookie("pn")]["karten"][ind]["cardv"]
+      console.log("checkWC:::" + checkWC)
+      if(checkWC === "WC" || checkWC === "+4"){
+        this.isOpen = !this.isOpen
+        while(this.isOpen === true){
+          await new Promise(r => setTimeout(r, 1));
+        }
+      }
       this.url = "/game_mult/place/" + ind + "/" + this.getCookie("game");
       await this.gameChanges(this.url)
+      if(checkWC === "WC" || checkWC === "+4"){
+          await this.chooseColor()
+      }
     },
     clickCardError() {
-      alert("You can't place a card now! Wait for your turn!")
+      notify({
+        title: "Error",
+        text: "You can't place a card now! Wait for your turn!",
+        type: "error",
+        duration: 3000,
+      });
     },
     createImageUrl(image){
-      let img_url = new URL(this.baseUrl+ 'images/' + image, import.meta.url).href
-      console.log(img_url)
-      return img_url
+      return  new URL(this.baseUrl+ 'images/' + image, import.meta.url).href
     },
     async nextPlayerMult() {
-      this.url = "/game_mult/next/" + this.getCookie("game");
-      await this.gameChanges(this.url)
+      if(this.tookCard === true){
+        this.url = "/game_mult/next/" + this.getCookie("game");
+        await this.gameChanges(this.url)
+        this.tookCard = false
+      }else{
+        notify({
+          title: "Error",
+          text: "You have to take a card first!",
+          type: "error",
+          duration: 3000,
+        });
+      }
+    },
+    nextPlayerMultErr(){
+      notify({
+        title: "Error",
+        text: "You can't skip your turn now! Wait for your turn!",
+        type: "error",
+        duration: 3000,
+      });
     },
     async takeCardMult() {
       this.url = "/game_mult/take/" + this.getCookie("game");
       await this.gameChanges(this.url)
+      this.tookCard = true;
+    },
+    takeCardMultErr(){
+      notify({
+        title: "Error",
+        text: "You can't take a card now! Wait for your turn!",
+        type: "error",
+        duration: 3000,
+      });
     },
     setGameCode() {
       this.game_code = this.getCookie("game");
     },
     async createCardsMultiplayer(json) {
+      this.currentJson = json
       this.waiting = false;
       this.midCard = json["game"].midCard["png_ind"][0]["card_png"];
       //-----------------------------------------
@@ -140,7 +253,12 @@ export default {
       this.clickable = false;
       if (this.currentstate === this.getCookie("player")) {
         if (json["game"].ERROR !== 0) {
-          alert("This card cannot be placed");
+          notify({
+            title: "Error",
+            text: "You can't place this card",
+            type: "error",
+            duration: 3000,
+          });
         }
         this.clickable = true;
         if (this.getCookie("pn") === "player1") {
@@ -153,10 +271,10 @@ export default {
       } else {
         if (this.getCookie("pn") === "player1") {
           this.player_cards = json["game"].player1["png_ind"];
-          this.play_against = "playing against: " + json["game"].player2["name"] + " with " + json["game"].player2["kartenzahl"] + " cards left";
+          this.enemy_cards = json["game"].player2["name"] + " has " + json["game"].player2["kartenzahl"] + " cards left";
         } else {
           this.player_cards = json["game"].player2["png_ind"];
-          this.play_against = "playing against: " + json["game"].player1["name"] + " with " + json["game"].player1["kartenzahl"] + " cards left";
+          this.enemy_cards = json["game"].player1["name"] + " has " + json["game"].player1["kartenzahl"] + " cards left";
         }
       }
       this.cards = [];
@@ -180,4 +298,110 @@ export default {
 
 <style lang="less" scoped>
 @import "../../public/style/playState.less";
+
+.glow {
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  -webkit-animation: glow 1s ease-in-out infinite alternate;
+  -moz-animation: glow 1s ease-in-out infinite alternate;
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes glow {
+  from {
+    text-shadow: 0 0 2px #fff, 0 0 4px #fff, 0 0 6px #fff, 0 0 8px #e60073, 0 0 10px #e60073, 0 0 12px #e60073, 0 0 14px #e60073;
+  }
+  to {
+    text-shadow: 0 0 4px #fff, 0 0 6px #ff4da6, 0 0 8px #ff4da6, 0 0 10px #ff4da6, 0 0 12px #ff4da6, 0 0 14px #ff4da6, 0 0 16px #ff4da6;
+  }
+}
+
+.glowBig {
+  margin-top: 45px;
+  font-size: 32px;
+  color: #fff;
+  text-align: center;
+  -webkit-animation: glowBig 2s ease-in-out infinite alternate;
+  -moz-animation: glowBig 2s ease-in-out infinite alternate;
+  animation: glowBig 2s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes glowBig {
+  from {
+    text-shadow: 0 0 4px #fff, 0 0 8px grey, 0 0 12px green, 0 0 16px blue, 0 0 20px blueviolet, 0 0 24px pink, 0 0 28px red;
+  }
+  to {
+    text-shadow: 0 0 8px #fff, 0 0 12px grey, 0 0 16px green, 0 0 20px blue, 0 0 24px blueviolet, 0 0 28px pink, 0 0 32px red;
+  }
+}
+
+bodY {
+  margin: auto;
+  box-sizing: border-box;
+}
+.marg-waves{
+  margin-top: 80px;
+}
+.marg-txt{
+  margin-top: 40px;
+}
+.txt{
+  font-size: 28px;
+  color: white;
+}
+.centerr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: @background;
+}
+.wave {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(45deg, cyan, #fff);
+  margin: 10px;
+  animation: wave 1s linear infinite;
+  border-radius: 10px;
+}
+.wave:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.wave:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.wave:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.wave:nth-child(5) {
+  animation-delay: 0.4s;
+}
+.wave:nth-child(6) {
+  animation-delay: 0.5s;
+}
+.wave:nth-child(7) {
+  animation-delay: 0.6s;
+}
+.wave:nth-child(8) {
+  animation-delay: 0.7s;
+}
+.wave:nth-child(9) {
+  animation-delay: 0.8s;
+}
+.wave:nth-child(10) {
+  animation-delay: 0.9s;
+}
+
+@keyframes wave {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
 </style>

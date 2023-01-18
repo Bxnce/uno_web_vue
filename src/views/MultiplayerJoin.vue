@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid full-layout" id="container_all">
     <NavBar/>
-    <LoadingAnimation/>
+  <div class="top-margin"></div>
   <div class="row mt-3">
     <div class="col">
       <div class="d-flex justify-content-center">
@@ -38,7 +38,6 @@
 
 <script>
 import NavBar from "../components/NavBar.vue";
-import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
 
 import { post_it } from "../main.js";
@@ -51,13 +50,13 @@ export default {
       hash: "",
     };
   },
-  components: {Footer, LoadingAnimation, NavBar},
+  components: {Footer, NavBar},
   methods: {
     async clicker() {
       if (this.player2 === "" || this.hash === "") {
         alert("Please enter name and hash");
       } else {
-        this.setCookies("player2State", this.hash);
+        this.setCookies("player2State", this.hash, "player2");
         this.res = await post_it("/game_mult/join/" + this.getCookie("game") + "/" + this.getCookie("name"))
         if (this.res.ok) {
           this.$router.push("/mpstart");
