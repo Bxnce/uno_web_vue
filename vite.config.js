@@ -90,5 +90,5 @@ export default defineConfig({
     port:8080,
     https: true,
   },
-  base : "/uno_web_vue/"
-})
+  base : "/uno_web_vue/",
+});
