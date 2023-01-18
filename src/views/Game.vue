@@ -31,13 +31,15 @@
         <button id="next_player_button" type="button" @click="nextPlayer()" class="glow-on-hover">next player</button>
       </div>
     </div>
+    <notifications position="bottom right" />
   </div>
 </template>
 <script>
 import NavBar from "../components/NavBar.vue";
 import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
-import { post_it, BASE_URL } from "../main.js";
+import {BASE_URL, post_it} from "../main.js";
+import {notify} from "@kyvg/vue3-notification";
 
 export default {
   name: "game",
@@ -65,9 +67,7 @@ export default {
       await this.getJSON('/game/take');
     },
     createImageUrl(image){
-      let img_url = new URL(this.baseUrl+ 'images/' + image, import.meta.url).href
-      console.log(img_url)
-      return img_url
+      return new URL(this.baseUrl + 'images/' + image, import.meta.url).href
     },
     async startGame() {
       await this.getJSON('/game/json');
@@ -87,12 +87,22 @@ export default {
       this.player_cards = []
       if (this.currentstate === "player1State") {
         if (json["game"].ERROR !== 0) {
-          alert("This card cannot be placed");
+          notify({
+            title: "Error",
+            text: "You can't place this card",
+            type: "error",
+            duration: 3000,
+          });
         }
         this.player_cards = json["game"].player1["png_ind"];
       } else if (this.currentstate === "player2State") {
         if (json["game"].ERROR !== 0) {
-          alert("This card cannot be placed");
+          notify({
+            title: "Error",
+            text: "You can't place this card",
+            type: "error",
+            duration: 3000,
+          });
         }
         this.player_cards = json["game"].player2["png_ind"];
       }

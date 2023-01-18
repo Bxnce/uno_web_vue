@@ -12,7 +12,8 @@
             <div class="col-6 g-0">
               <img v-if="clickable === true" src="/images/cards/uno_back.png" alt="X" @click="takeCardMult()"
                    class="card_stack img-fluid" id="take_card">
-              <img v-else src="/images/cards/uno_back.png" alt="X" class="card_stack img-fluid" id="take_card">
+              <img v-else src="/images/cards/uno_back.png" alt="X" class="card_stack img-fluid" id="take_card"
+                   @click="takeCardMultErr()">
             </div>
           </div>
         </div>
@@ -31,28 +32,66 @@
     </div>
     <div class="row center-align top-5">
       <div class="col">
-        <button v-if="waiting === true" id="next_player_button_mult" type="button" class="glow-on-hover" disabled>
-          waiting for enemy.
-        </button>
-        <button v-else id="next_player_button_mult" type="button" @click="nextPlayerMult()" class="glow-on-hover">next
-          player
-        </button>
+        <div v-if="waiting === true" >
+          <button id="next_player_button_mult" type="button" class="glow-on-hover" disabled>
+            waiting for enemy.
+          </button>
+        </div>
+        <div v-else>
+          <div v-if="clickable===true">
+            <button id="next_player_button_mult" type="button" @click="nextPlayerMult()" class="glow-on-hover">next
+              player
+            </button>
+          </div>
+          <div v-else>
+            <button id="next_player_button_mult" type="button" @click="nextPlayerMultErr()" class="glow-on-hover">not
+              your turn!
+            </button>
+          </div>
+        </div>
         <div v-if="waiting === true" style="font-size: 32px; color: white">Your game code is: {{ game_code }}</div>
       </div>
     </div>
+    <notifications position="bottom right" />
+    <ColorChoosev2 :open="isOpen" @close="isOpen = !isOpen">
+      <table class="cnter">
+        <tr>
+          <td>
+            <img id="red" src="/images/cards/red.png" alt="X" class="cards img-fluid" @click="chooseColor('Red'); $emit('close')">
+          </td>
+          <td>
+            <img id="blue" src="/images/cards/blue.png" alt="X" class="cards img-fluid" @click="chooseColor('Blue'); $emit('close')">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <img id="green" src="/images/cards/green.png" alt="X" class="cards img-fluid" @click="chooseColor('Green'); $emit('close')">
+          </td>
+          <td>
+            <img id="yellow" src="/images/cards/yellow.png" alt="X" class="cards img-fluid" @click="chooseColor('Yellow'); $emit('close')">
+          </td>
+        </tr>
+      </table>
+    </ColorChoosev2>
   </div>
 </template>
 
 <script>
 import NavBar from "../components/NavBar.vue";
 import LoadingAnimation from "../components/LoadingAnimation.vue";
-import Footer from "../components/Footer.vue";
 import {post_it, BASE_URL} from "../main.js";
+import {notify} from "@kyvg/vue3-notification";
+import ColorChoosev2 from "../components/ColorChoosev2.vue";
+import {ref} from "vue";
 
 
 export default {
   name: "GameMultiplayer",
-  components: {Footer, LoadingAnimation, NavBar},
+  components: { LoadingAnimation, NavBar, ColorChoosev2,},
+  setup() {
+    const isOpen = ref(false)
+    return {isOpen}
+  },
   data() {
     return {
       socket: undefined,
@@ -72,8 +111,10 @@ export default {
       wrapperd_cards: '',
       card: '',
       cards: [],
+      currentJson: '',
       midCard: 'uno_back.png',
       baseUrl : BASE_URL,
+      tookCard : false,
     }
   },
   created() {
@@ -103,6 +144,13 @@ export default {
 
       setInterval(() => this.socket.send("Keep alive"), 20000); // ping every 20 seconds
     },
+    async chooseColor(color) {
+      this.url = "/game_mult/color/" + this.getCookie("game") + "/" + color;
+      await this.gameChanges(this.url)
+      console.log(color)
+      this.hide()
+      this.socket.send("refresh");
+    },
     getCookie(name) {
       this.value = `; ${document.cookie}`;
       this.parts = this.value.split(`; ${name}=`);
@@ -111,22 +159,53 @@ export default {
     async clickCardMult(ind) {
       this.url = "/game_mult/place/" + ind + "/" + this.getCookie("game");
       await this.gameChanges(this.url)
-    },
+      console.log(this.midCard)
+      },
     clickCardError() {
-      alert("You can't place a card now! Wait for your turn!")
+      notify({
+        title: "Error",
+        text: "You can't place a card now! Wait for your turn!",
+        type: "error",
+        duration: 3000,
+      });
     },
     createImageUrl(image){
-      let img_url = new URL(this.baseUrl+ 'images/' + image, import.meta.url).href
-      console.log(img_url)
-      return img_url
+      return  new URL(this.baseUrl+ 'images/' + image, import.meta.url).href
     },
     async nextPlayerMult() {
-      this.url = "/game_mult/next/" + this.getCookie("game");
-      await this.gameChanges(this.url)
+      if(this.tookCard === true){
+        this.url = "/game_mult/next/" + this.getCookie("game");
+        await this.gameChanges(this.url)
+        this.tookCard = false
+      }else{
+        notify({
+          title: "Error",
+          text: "You have to take a card first!",
+          type: "error",
+          duration: 3000,
+        });
+      }
+    },
+    nextPlayerMultErr(){
+      notify({
+        title: "Error",
+        text: "You can't skip your turn now! Wait for your turn!",
+        type: "error",
+        duration: 3000,
+      });
     },
     async takeCardMult() {
       this.url = "/game_mult/take/" + this.getCookie("game");
       await this.gameChanges(this.url)
+      this.tookCard = true;
+    },
+    takeCardMultErr(){
+      notify({
+        title: "Error",
+        text: "You can't take a card now! Wait for your turn!",
+        type: "error",
+        duration: 3000,
+      });
     },
     setGameCode() {
       this.game_code = this.getCookie("game");
@@ -140,7 +219,12 @@ export default {
       this.clickable = false;
       if (this.currentstate === this.getCookie("player")) {
         if (json["game"].ERROR !== 0) {
-          alert("This card cannot be placed");
+          notify({
+            title: "Error",
+            text: "You can't place this card",
+            type: "error",
+            duration: 3000,
+          });
         }
         this.clickable = true;
         if (this.getCookie("pn") === "player1") {

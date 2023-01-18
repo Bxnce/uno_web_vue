@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid full-layout" id="container_all">
-    <NavBar />
-    <LoadingAnimation />
+    <NavBar/>
+    <LoadingAnimation/>
     <div class="row center-align">
       <div class="col">
         <div class="main_header">
