@@ -1,20 +1,29 @@
 <template>
-    <div class="px-6 pb-6 text-center zax">
-        <h3 class="text-xl mb-2 font-semibold">Choose The Color</h3>
-
+  <div class="vue-modal" v-show="open">
+    <div class="vue-modal-inner">
+      <div class="vue-modal-content">
+        <slot/>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 import {post_it} from "../main";
 
 export default {
-  name: "ColorChoose",
-  methods: {
-    hide() {
-      console.log('click registered');
-      this.$emit('close')
+  props: {
+    open: {
+      type: Boolean,
+      required: true
     },
+  },
+  data () {
+    return {
+      color: '',
+    }
+  },
+  methods: {
     getCookie(name) {
       this.value = `; ${document.cookie}`;
       this.parts = this.value.split(`; ${name}=`);
@@ -22,9 +31,9 @@ export default {
     },
     async chooseColor(color) {
       this.url = "/game_mult/color/" + this.getCookie("game") + "/" + color;
+      this.color = color;
       //await this.gameChanges(this.url)
       console.log(color)
-      this.hide()
     },
     async gameChanges(url) {
       this.res = await post_it(url);
@@ -39,28 +48,46 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-@import "../../public/style/playState.less";
-.bounce-enter-active {
-  animation: bounce-in .5s ease-out both;
+<style lang="less">
+@import "../../public/style/main.less";
+*,
+::before,
+::after {
+  margin: 0;
+  padding:0;
+  box-sizing: border-box;
 }
 
-.bounce-leave-active {
-  animation: bounce-in .5s reverse ease-in both;
+.vue-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background-color: rgba(0,0,0,0.8);
+  z-index: 1;
+}
+
+.vue-modal-inner {
+  max-width: 500px;
+  margin: 2rem auto;
 }
 .cnter{
   margin-left: auto;
   margin-right: auto;
 }
-@keyframes bounce-in {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.10);
-  }
-  100% {
-    transform: scale(1);
-  }
+.vue-modal-content {
+  color: white;
+  top: 20%;
+  left: 43%;
+  position: fixed;
+  background-color: #fff;
+  border: 2px solid rgba(0,0,0,0);
+  background-clip: padding-box;
+  border-radius: 0.3rem;
+  padding: 1rem;
+  background-color: rgba(7,7,7,0);
 }
 </style>

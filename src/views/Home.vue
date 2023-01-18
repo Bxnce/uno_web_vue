@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid full-layout" id="container_all">
+  <div class="container-fluid full-layout " id="container_all">
     <NavBar/>
     <LoadingAnimation/>
     <div class="row center-align">

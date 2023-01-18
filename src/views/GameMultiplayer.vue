@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid full-layout" id="container_all">
     <NavBar/>
-    <LoadingAnimation/>
+    <div class="top-margin"></div>
     <div id="top_cards">
       <div class="row row-col-2">
         <div class="col-4 offset-4">
@@ -33,9 +33,18 @@
     <div class="row center-align top-5">
       <div class="col">
         <div v-if="waiting === true" >
-          <button id="next_player_button_mult" type="button" class="glow-on-hover" disabled>
-            waiting for enemy.
-          </button>
+          <div class="centerr marg-waves">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+          </div>
         </div>
         <div v-else>
           <div v-if="clickable===true">
@@ -44,35 +53,48 @@
             </button>
           </div>
           <div v-else>
-            <button id="next_player_button_mult" type="button" @click="nextPlayerMultErr()" class="glow-on-hover">not
-              your turn! {{ enemy_cards }}
-            </button>
+              <p class="marg-txt txt">
+                Not your turn! {{ this.enemy_cards }}
+              </p>
+              <div class="centerr">
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+                <div class="wave"></div>
+              </div>
           </div>
         </div>
-        <div v-if="waiting === true" style="font-size: 32px; color: white">Your game code is: {{ game_code }}</div>
+        <div v-if="waiting === true" class="marg-txt txt">Waiting for opponent! Your game code is: {{ game_code }}</div>
       </div>
     </div>
     <notifications position="bottom right" />
-    <ColorChoosev2 :open="isOpen" @close="isOpen = !isOpen">
+    <ColorChoose :open="isOpen" @close="isOpen = !isOpen">
+      <p class="glow">Choose your Color!</p>
       <table class="cnter">
         <tr>
           <td>
-            <img id="red" src="/images/cards/red.png" alt="X" class="cards img-fluid" @click="chooseColor('Red'); $emit('close')">
+            <img id="red" src="/images/cards/red.png" alt="X" class="cards img-fluid" @click="setColor('Red')">
           </td>
           <td>
-            <img id="blue" src="/images/cards/blue.png" alt="X" class="cards img-fluid" @click="chooseColor('Blue'); $emit('close')">
+            <img id="blue" src="/images/cards/blue.png" alt="X" class="cards img-fluid" @click="setColor('Blue')">
           </td>
         </tr>
         <tr>
           <td>
-            <img id="green" src="/images/cards/green.png" alt="X" class="cards img-fluid" @click="chooseColor('Green'); $emit('close')">
+            <img id="green" src="/images/cards/green.png" alt="X" class="cards img-fluid" @click="setColor('Green')">
           </td>
           <td>
-            <img id="yellow" src="/images/cards/yellow.png" alt="X" class="cards img-fluid" @click="chooseColor('Yellow'); $emit('close')">
+            <img id="yellow" src="/images/cards/yellow.png" alt="X" class="cards img-fluid" @click="setColor('Yellow')">
           </td>
         </tr>
       </table>
-    </ColorChoosev2>
+    </ColorChoose>
   </div>
 </template>
 
@@ -81,13 +103,13 @@ import NavBar from "../components/NavBar.vue";
 import LoadingAnimation from "../components/LoadingAnimation.vue";
 import {post_it, BASE_URL} from "../main.js";
 import {notify} from "@kyvg/vue3-notification";
-import ColorChoosev2 from "../components/ColorChoosev2.vue";
+import ColorChoose from "../components/ColorChoose.vue";
 import {ref} from "vue";
 
 
 export default {
   name: "GameMultiplayer",
-  components: { LoadingAnimation, NavBar, ColorChoosev2,},
+  components: { NavBar, ColorChoose,},
   setup() {
     const isOpen = ref(false)
     return {isOpen}
@@ -112,6 +134,7 @@ export default {
       card: '',
       cards: [],
       currentJson: '',
+      chosenColor: '',
       midCard: 'uno_back.png',
       baseUrl : BASE_URL,
       tookCard : false,
@@ -133,7 +156,6 @@ export default {
             console.log("ping")
           } else {
             console.log("json reloaded");
-            console.log(JSON.parse(event.data));
             _this.createCardsMultiplayer(JSON.parse(event.data));
           }
         } else {
@@ -144,12 +166,14 @@ export default {
 
       setInterval(() => this.socket.send("Keep alive"), 20000); // ping every 20 seconds
     },
-    async chooseColor(color) {
-      this.url = "/game_mult/color/" + this.getCookie("game") + "/" + color;
+    async chooseColor() {
+      this.url = "/game_mult/color/" + this.getCookie("game") + "/" + this.chosenColor;
       await this.gameChanges(this.url)
-      console.log(color)
-      this.hide()
-      this.socket.send("refresh");
+      console.log(this.chosenColor)
+    },
+    setColor(color) {
+      this.chosenColor = color
+      this.isOpen = !this.isOpen
     },
     getCookie(name) {
       this.value = `; ${document.cookie}`;
@@ -157,6 +181,14 @@ export default {
       if (this.parts.length === 2) return this.parts.pop().split(';').shift();
     },
     async clickCardMult(ind) {
+      const checkWC = this.currentJson["game"][this.getCookie("pn")]["karten"][ind]["cardv"]
+      console.log("checkWC:::" + checkWC)
+      if(checkWC === "WC" || checkWC === "+4"){
+        this.isOpen = !this.isOpen
+        while(this.isOpen === true){
+          await new Promise(r => setTimeout(r, 1));
+        }
+      }
       this.url = "/game_mult/place/" + ind + "/" + this.getCookie("game");
       await this.gameChanges(this.url)
       console.log(this.midCard)
@@ -264,4 +296,110 @@ export default {
 
 <style lang="less" scoped>
 @import "../../public/style/playState.less";
+
+.glow {
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  -webkit-animation: glow 1s ease-in-out infinite alternate;
+  -moz-animation: glow 1s ease-in-out infinite alternate;
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes glow {
+  from {
+    text-shadow: 0 0 2px #fff, 0 0 4px #fff, 0 0 6px #fff, 0 0 8px #e60073, 0 0 10px #e60073, 0 0 12px #e60073, 0 0 14px #e60073;
+  }
+  to {
+    text-shadow: 0 0 4px #fff, 0 0 6px #ff4da6, 0 0 8px #ff4da6, 0 0 10px #ff4da6, 0 0 12px #ff4da6, 0 0 14px #ff4da6, 0 0 16px #ff4da6;
+  }
+}
+
+.glowBig {
+  margin-top: 45px;
+  font-size: 32px;
+  color: #fff;
+  text-align: center;
+  -webkit-animation: glowBig 2s ease-in-out infinite alternate;
+  -moz-animation: glowBig 2s ease-in-out infinite alternate;
+  animation: glowBig 2s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes glowBig {
+  from {
+    text-shadow: 0 0 4px #fff, 0 0 8px grey, 0 0 12px green, 0 0 16px blue, 0 0 20px blueviolet, 0 0 24px pink, 0 0 28px red;
+  }
+  to {
+    text-shadow: 0 0 8px #fff, 0 0 12px grey, 0 0 16px green, 0 0 20px blue, 0 0 24px blueviolet, 0 0 28px pink, 0 0 32px red;
+  }
+}
+
+bodY {
+  margin: auto;
+  box-sizing: border-box;
+}
+.marg-waves{
+  margin-top: 80px;
+}
+.marg-txt{
+  margin-top: 40px;
+}
+.txt{
+  font-size: 28px;
+  color: white;
+}
+.centerr {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: @background;
+}
+.wave {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(45deg, cyan, #fff);
+  margin: 10px;
+  animation: wave 1s linear infinite;
+  border-radius: 10px;
+}
+.wave:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.wave:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.wave:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.wave:nth-child(5) {
+  animation-delay: 0.4s;
+}
+.wave:nth-child(6) {
+  animation-delay: 0.5s;
+}
+.wave:nth-child(7) {
+  animation-delay: 0.6s;
+}
+.wave:nth-child(8) {
+  animation-delay: 0.7s;
+}
+.wave:nth-child(9) {
+  animation-delay: 0.8s;
+}
+.wave:nth-child(10) {
+  animation-delay: 0.9s;
+}
+
+@keyframes wave {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
 </style>

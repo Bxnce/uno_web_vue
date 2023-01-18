@@ -57,7 +57,7 @@ export default {
       if (this.player2 === "" || this.hash === "") {
         alert("Please enter name and hash");
       } else {
-        this.setCookies("player2State", this.hash);
+        this.setCookies("player2State", this.hash, "player2");
         this.res = await post_it("/game_mult/join/" + this.getCookie("game") + "/" + this.getCookie("name"))
         if (this.res.ok) {
           this.$router.push("/mpstart");
