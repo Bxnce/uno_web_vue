@@ -47,7 +47,7 @@
 import NavBar from "../components/NavBar.vue";
 import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
-import {post_it} from "../main.js";
+import {post_it, BASE_URL} from "../main.js";
 
 
 export default {
@@ -73,6 +73,7 @@ export default {
       card: '',
       cards: [],
       midCard: 'uno_back.png',
+      baseUrl : BASE_URL,
     }
   },
   created() {
