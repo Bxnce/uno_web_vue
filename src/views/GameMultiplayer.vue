@@ -100,7 +100,7 @@ export default {
       url: '',
       clickable: false,
       waiting: true,
-      play_against: '',
+      enemy_cards: '',
       game_code: '',
       req: '',
       res: '',
