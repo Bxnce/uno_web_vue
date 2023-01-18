@@ -45,7 +45,7 @@
           </div>
           <div v-else>
             <button id="next_player_button_mult" type="button" @click="nextPlayerMultErr()" class="glow-on-hover">not
-              your turn!
+              your turn! {{ enemy_cards }}
             </button>
           </div>
         </div>
@@ -237,10 +237,10 @@ export default {
       } else {
         if (this.getCookie("pn") === "player1") {
           this.player_cards = json["game"].player1["png_ind"];
-          this.play_against = "playing against: " + json["game"].player2["name"] + " with " + json["game"].player2["kartenzahl"] + " cards left";
+          this.enemy_cards = json["game"].player2["name"] + " has " + json["game"].player2["kartenzahl"] + " cards left";
         } else {
           this.player_cards = json["game"].player2["png_ind"];
-          this.play_against = "playing against: " + json["game"].player1["name"] + " with " + json["game"].player1["kartenzahl"] + " cards left";
+          this.enemy_cards = json["game"].player1["name"] + " has " + json["game"].player1["kartenzahl"] + " cards left";
         }
       }
       this.cards = [];
