@@ -7,7 +7,7 @@
         <div class="col-4 offset-4">
           <div class="row center-align">
             <div class="col-6 g-0">
-              <img id="midCard" :src="'/images/'+ midCard" alt="X" class="card_no_hover img-fluid">
+              <img id="midCard" :src="createImageUrl(midCard)" alt="X" class="card_no_hover img-fluid">
             </div>
             <div class="col-6 g-0">
               <img src="/images/uno_back.png" alt="X" @click="takeCard()" class="card_stack img-fluid"
@@ -21,7 +21,7 @@
       <div class="col-6 offset-3" v-if="currentstate === 'player1State' || currentstate === 'player2State'">
         <div class="row row-cols-3 g-0 center-align top-5 remove-margin">
           <div class="col-sm-4 col-md-4 col-lg-3 col-xl-2 center-align remove-margin" v-for="(card, index) in cards"> <!-- margin of this div is to big -->
-            <img alt="X" @click='clickCard(index)' class="cards remove-margin img-fluid" :src="'/images/'+ card">
+            <img alt="X" @click='clickCard(index)' class="cards remove-margin img-fluid" :src="createImageUrl(card)">
           </div>
         </div>
       </div>
@@ -37,8 +37,7 @@
 import NavBar from "../components/NavBar.vue";
 import LoadingAnimation from "../components/LoadingAnimation.vue";
 import Footer from "../components/Footer.vue";
-import { post_it } from "../main.js";
-
+import { post_it, BASE_URL } from "../main.js";
 
 export default {
   name: "game",
@@ -51,6 +50,7 @@ export default {
       player_cards: [],
       cards: [],
       midCard: 'uno_back.png',
+      baseUrl: BASE_URL,
     }
   },
   methods: {
@@ -63,6 +63,11 @@ export default {
     },
     async takeCard() {
       await this.getJSON('/game/take');
+    },
+    createImageUrl(image){
+      let img_url = new URL(this.baseUrl+ 'images/' + image, import.meta.url).href
+      console.log(img_url)
+      return img_url
     },
     async startGame() {
       await this.getJSON('/game/json');
