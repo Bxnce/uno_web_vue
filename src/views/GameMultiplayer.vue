@@ -7,7 +7,7 @@
         <div class="col-4 offset-4">
           <div class="row center-align">
             <div class="col-6 g-0">
-              <img id="midCard" :src="location.host + '/images/'+ midCard" alt="X" class="card_no_hover img-fluid">
+              <img id="midCard" :src="createImageUrl(midCard)" alt="X" class="card_no_hover img-fluid">
             </div>
             <div class="col-6 g-0">
               <img v-if="clickable === true" src="/images/cards/uno_back.png" alt="X" @click="takeCardMult()"
