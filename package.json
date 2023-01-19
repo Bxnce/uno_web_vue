@@ -10,7 +10,6 @@
   "dependencies": {
     "@kyvg/vue3-notification": "^2.8.0",
     "@popperjs/core": "^2.11.6",
-    "@vitejs/plugin-basic-ssl": "^1.0.1",
     "bootstrap": "^5.2.3",
     "jquery": "^3.6.2",
     "popper": "^1.0.1",

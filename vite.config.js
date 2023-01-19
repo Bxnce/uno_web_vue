@@ -3,11 +3,10 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import {VitePWA} from "vite-plugin-pwa";
-import basicSsl from '@vitejs/plugin-basic-ssl'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [basicSsl(), vue(), VitePWA({
+  plugins: [vue(), VitePWA({
     registerType: "autoUpdate",
     devOptions: {
       enabled: true,
@@ -86,10 +85,6 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  },
-  server: {
-    port:8080,
-    https: true,
   },
   base : "/uno_web_vue/",
 });
