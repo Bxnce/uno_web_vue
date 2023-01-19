@@ -1,0 +1,66 @@
+@import "main";
+
+input[type=text]{
+    background-color: rgba(38,38,38,1) ;
+    border-color: white ;
+    border-radius: 5px ;
+    color: white ;
+}
+.preState{
+    display: inline-block;
+    animation: fade-in 0.5s linear;
+    text-align: center;
+}
+
+.input-field {
+  position: relative ; 
+}
+label {
+  font: @font ;
+  position: absolute ;
+  top: 0 ;
+  left: 0 ;
+  width: 100% ;
+  color: #d3d3d3 ;
+  transition: 0.2s all ;
+  cursor: text ;
+}
+input {
+  font: @font ;
+  width: 100% ;
+  border: 0 ;
+  outline: 0 ;
+  padding: 0.5rem 0 ;
+  border-bottom: 2px solid #d3d3d3 ;
+  box-shadow: none ;
+  text-align: center ;
+  color: #111 ;
+}
+input:invalid {
+  outline: 0 ;
+}
+input:focus,
+input:valid {
+  border-color: #4ec08b ;
+}
+input:focus~label,
+input:valid~label {
+  color: #4ec08b ;
+}
+
+.glow-on-hover {
+  text-decoration: none;
+  outline: none;
+  margin-top: none;
+  margin-bottom: none;
+  color: rgb(214, 212, 212);
+}
+
+footer {
+    text-align: center;
+    bottom: 0;
+    left: 0;
+    width: 99%;
+    position: fixed !important;
+}
+

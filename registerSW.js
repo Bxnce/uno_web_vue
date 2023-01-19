@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/uno_web_vue/sw.js', { scope: '/uno_web_vue/' })})}
